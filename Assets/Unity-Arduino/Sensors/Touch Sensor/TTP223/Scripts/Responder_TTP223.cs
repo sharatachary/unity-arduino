@@ -5,11 +5,11 @@ using UnityEngine.Events;
 //  ls /dev/tty.*
 //  /dev/tty.usbserial-210 - A sample port on mac.
 
-public class Responder_HCSR04 : MonoBehaviour
+public class Responder_TTP223 : MonoBehaviour
 {
     public SerialController serialController;
 
-    public UnityEvent<float> OnMessage;
+    public UnityEvent<bool> OnMessage;
 
 
     public void Update()
@@ -21,18 +21,16 @@ public class Responder_HCSR04 : MonoBehaviour
         if (message == null)
             return;
 
-        float distance;
+        float value = 0;
 
-        if (!float.TryParse(message, out distance))
+        if (!float.TryParse(message, out value))
         {
-            distance = 0;
+            value = 0;
         }
 
-        float distanceMax = 50;
-        distance = Mathf.Clamp(distance, 0, distanceMax);
-        float percent = distance / distanceMax;
+        bool isTouchOn = value > 0;
 
-        OnMessage?.Invoke(percent);
+        OnMessage?.Invoke(isTouchOn);
     }
 
 }
